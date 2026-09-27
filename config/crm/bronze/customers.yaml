@@ -19,12 +19,12 @@ target:
   raw:
     catalog: klyra
     schema: raw
-    table: crm_customers
+    table: customers
     format: delta
   master:
     catalog: klyra
-    schema: bronze
-    table: crm_customers
+    schema: prepared
+    table: customers
     format: delta
   write:
     mode: merge
