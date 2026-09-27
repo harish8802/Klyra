@@ -1,0 +1,49 @@
+job:
+  name: customers
+  type: batch
+  frequency: daily
+  mode: load
+
+source:
+  type: file
+  format: csv
+  header: True
+  delimiter: ','
+  path: '/Volumes/klyra/landing_zone/crm/daily_data/'
+  date_format: 'dd/MM/yyyy'
+  timestamp_format: 'dd/MM/yyyy HH:mm:ss'
+  file_format: 'customers_{dd}-{MM}-{yyyy}.csv'
+
+target:
+  raw:
+    catalog: klyra
+    schema: raw
+    table: customers
+    format: delta
+  master:
+    catalog: klyra
+    schema: prepared
+    table: customers
+    format: delta
+  write:
+    mode: merge
+    keys: customer_id
+
+validation:
+  non_nullable: 
+    - customer_id
+    - customer_name
+    - phone
+  
+  rules:
+    phone:
+      min_length: 9
+      max_length: 10
+      numeric_only: True
+    
+
+
+
+
+
+
