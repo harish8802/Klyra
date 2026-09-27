@@ -32,7 +32,7 @@ def merge_table(spark,df,target_config):
     logger.info('Starting merge: source=%s target=%s key=%s', raw_table, master_table, join_key)
     update_set=','.join([f'm.{col}=r.{col}' for col in df.columns if col not in ['updated_at','record_version']])
     update_set+=',m.updated_at=current_timestamp(),m.record_version=m.record_version+r.record_version'
-    overwrite_table(spark,df,target_config['raw'])
+    overwrite_table(df,target_config['raw'])
     merge_sql = f'''merge into {master_table} as m using {raw_table} as r
      on m.{join_key} = r.{join_key}
      when matched then update set {update_set}
