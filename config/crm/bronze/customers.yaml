@@ -13,18 +13,18 @@ source:
   path: '/Volumes/klyra/landing_zone/crm/daily_data/'
   date_format: 'dd/MM/yyyy'
   timestamp_format: 'dd/MM/yyyy HH:mm:ss'
-  file_format: 'customers_{dd}-{MM}-{yyyy}.csv'
+  file_format: 'crm_customers_{dd}-{MM}-{yyyy}.csv'
 
 target:
   raw:
     catalog: klyra
     schema: raw
-    table: customers
+    table: crm_customers
     format: delta
   master:
     catalog: klyra
-    schema: prepared
-    table: customers
+    schema: bronze
+    table: crm_customers
     format: delta
   write:
     mode: merge
