@@ -4,11 +4,11 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-def read_source(spark,config,buisness_date):
-    logger.info('Preparing source read for business_date=%s', buisness_date)
+def read_source(spark,config,business_date):
+    logger.info('Preparing source read for business_date=%s', business_date)
     source=config['source']
     target_config =config['target']
-    dt=datetime.strptime(buisness_date,'%Y-%m-%d')
+    dt=datetime.strptime(business_date,'%Y-%m-%d')
     file=source['file_format'].replace('{dd}',dt.strftime('%d'))\
                             .replace('{MM}',dt.strftime('%m'))\
                             .replace('{yyyy}',dt.strftime('%Y'))
@@ -17,7 +17,7 @@ def read_source(spark,config,buisness_date):
     if source['type'] =='file':
         table_name=find_table(target_config['raw'])
         table =spark.table(table_name)
-        table = table.drop('batch_id','source_name','record_version','ingested_at','updated_at')
+        table = table.drop('batch_id','buisness_date','source_name','record_version','ingested_at','updated_at')
         schema =table.schema
         logger.info('Reading CSV path=%s schema=%s', file_path, schema.simpleString())
         return (spark.read\

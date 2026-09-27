@@ -48,7 +48,7 @@ def write_target(spark,df,config,batch_details):
     source_name = batch_details['source_name']
     logger.info('Preparing metadata columns for write')
     df=df.withColumn('batch_id',lit(batch_id).cast('bigint'))\
-        .withColumn('business_date',lit(business_date).cast('timestamp'))\
+        .withColumn('buisness_date',lit(business_date).cast('timestamp'))\
         .withColumn('source_name',lit(source_name).cast('string'))\
         .withColumn('record_version',lit(1).cast('bigint'))\
         .withColumn('ingested_at',current_timestamp())\
