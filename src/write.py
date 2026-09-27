@@ -2,7 +2,7 @@ import logging
 from pyspark.sql.functions import lit
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-from utility import find_table
+from src.utility import find_table
 
 logger = logging.getLogger(__name__)
 

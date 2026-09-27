@@ -1,5 +1,5 @@
 import logging
-from utility import find_table
+from src.utility import find_table
 from datetime import datetime
 
 logger = logging.getLogger(__name__)

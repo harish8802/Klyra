@@ -1,8 +1,8 @@
 import logging
 from pyspark.sql import SparkSession
-from read import read_source
-from config import load_config
-from write import write_target
+from src.read import read_source
+from src.config import load_config
+from src.write import write_target
 
 logger = logging.getLogger(__name__)
 
