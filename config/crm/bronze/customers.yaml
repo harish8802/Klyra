@@ -5,6 +5,7 @@ job:
   mode: load
 
 source:
+  name: crm  
   type: file
   format: csv
   header: True
@@ -18,12 +19,12 @@ target:
   raw:
     catalog: klyra
     schema: raw
-    table: customers
+    table: crm_customers
     format: delta
   master:
     catalog: klyra
-    schema: prepared
-    table: customers
+    schema: bronze
+    table: crm_customers
     format: delta
   write:
     mode: merge
