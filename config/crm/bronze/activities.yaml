@@ -1,0 +1,36 @@
+job:
+  name: activities
+  type: batch
+  frequency: daily
+  mode: load
+
+source:
+  name: crm
+  type: file
+  format: csv
+  header: True
+  delimiter: ','
+  path: '/Volumes/klyra/landing_zone/crm/daily_data/'
+  date_format: 'dd/MM/yyyy'
+  timestamp_format: 'yyyy/MM/dd HH:mm:ss'
+  file_format: 'crm_activities_{dd}-{MM}-{yyyy}.csv'
+
+target:
+  raw:
+    catalog: klyra
+    schema: raw
+    table: crm_activities
+    format: delta
+  master:
+    catalog: klyra
+    schema: bronze
+    table: crm_activities
+    format: delta
+  write:
+    mode: merge
+    keys: activity_id
+
+validation:
+  non_nullable:
+    columns:
+      - activity_id

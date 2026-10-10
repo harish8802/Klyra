@@ -1,0 +1,36 @@
+job:
+  name: invoices
+  type: batch
+  frequency: daily
+  mode: load
+
+source:
+  name: crm
+  type: file
+  format: csv
+  header: True
+  delimiter: ','
+  path: '/Volumes/klyra/landing_zone/crm/daily_data/'
+  date_format: 'dd/MM/yyyy'
+  timestamp_format: 'yyyy/MM/dd HH:mm:ss'
+  file_format: 'crm_invoices_{dd}-{MM}-{yyyy}.csv'
+
+target:
+  raw:
+    catalog: klyra
+    schema: raw
+    table: crm_invoices
+    format: delta
+  master:
+    catalog: klyra
+    schema: bronze
+    table: crm_invoices
+    format: delta
+  write:
+    mode: merge
+    keys: invoice_id
+
+validation:
+  non_nullable:
+    columns:
+      - invoice_id
