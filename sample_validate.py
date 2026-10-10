@@ -635,15 +635,6 @@ class ValidationEngine:
     def __init__(self):
         self.results: List[ValidationResult] = []
 
-    def register_rule(
-        self,
-        rule_name: str,
-        rule_class: Type[ValidationRule]
-    ) -> None:
-        """
-        Allows future extensions without changing the engine.
-        """
-        self.RULE_REGISTRY[ ] = rule_class
 
     def get_validator(self, rule_name: str) -> ValidationRule:
         rule_class = self.RULE_REGISTRY.get(rule_name)

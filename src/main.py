@@ -3,6 +3,7 @@ from pyspark.sql import SparkSession
 from src.read import read_source
 from src.config import load_config
 from src.write import write_target
+from src.validate import ValidateEngine
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +19,8 @@ def main(job,batch_details):
     print('Spark session ready')
     df = read_source(spark,config,batch_details['business_date'])
     logger.info('Source DataFrame prepared; beginning write')
+    validate_engine = ValidateEngine()
+    validation_results = validate_engine.validate(spark, df, config)
     write_target(spark,df,config,batch_details)
     logger.info('Job completed: job=%s business_date=%s', job, batch_details['business_date'])
 

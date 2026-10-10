@@ -31,10 +31,11 @@ target:
     keys: customer_id
 
 validation:
-  non_nullable: 
-    - customer_id
-    - customer_name
-    - phone
+  non_nullable:
+    columns:
+      - customer_id
+      - customer_name
+      - phone
   
   rules:
     phone:
