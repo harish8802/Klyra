@@ -12,7 +12,7 @@ source:
   delimiter: ','
   path: '/Volumes/klyra/landing_zone/crm/daily_data/'
   date_format: 'dd/MM/yyyy'
-  timestamp_format: 'dd/MM/yyyy HH:mm:ss'
+  timestamp_format: 'yyyy/MM/dd HH:mm:ss'
   file_format: 'crm_customers_{dd}-{MM}-{yyyy}.csv'
 
 target:
