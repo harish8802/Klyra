@@ -69,17 +69,42 @@ class ValidateEngine:
 
     def validate(self, spark: Any, df: Any, job_config: Dict[str, Any]) -> List[ValidationResult]:
         results: List[ValidationResult] = []
+        validation_config = job_config.get("validation", {})
+        logger.info("Starting validation with configured entries: %s", list(validation_config))
 
-        for rules in job_config['validation']:
-            validator = self.get_validator(rules)
-            result = validator.validate(spark, df, job_config['validation'][rules])
+        for rule_name, rule_config in validation_config.items():
+            if rule_name == "rules":
+                logger.warning(
+                    "Skipping validation config section 'rules'; it is not a registered validator."
+                )
+                continue
+
+            validator = self.get_validator(rule_name)
+            logger.info("Running validation rule '%s'", rule_name)
+            try:
+                result = validator.validate(spark, df, rule_config)
+            except Exception:
+                logger.exception("Validation rule '%s' raised an error", rule_name)
+                raise
+
             results.append(result)
+            logger.info(
+                "Validation rule '%s' completed with status=%s; checked=%s failed=%s",
+                result.rule_name,
+                result.status,
+                result.records_checked,
+                result.records_failed,
+            )
 
-        if results:
-            for res in results:
-                if res.status == "FAIL":
-                    raise ValueError(f"Validation failed for rule: {res.rule_name}, Status: {res.status}, Message: {res.message}")
-        else:
-            logger.info("All validations passed successfully.")
+        for result in results:
+            if result.status == "FAIL":
+                message = (
+                    f"Validation failed for rule: {result.rule_name}, "
+                    f"Status: {result.status}, Message: {result.message}"
+                )
+                logger.error(message)
+                raise ValueError(message)
+
+        logger.info("All registered validations passed successfully.")
 
         return results
